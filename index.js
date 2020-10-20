@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const request = require('request');
 
-var millisecondsToWait = 1000;
+var millisecondsToWait = 3600000;
 var d;
 var oldHour = -1;
 var hour = -1;
@@ -15,24 +15,15 @@ bot.on('ready', function(){
     timer()
 })
 
-bot.on('message', function (message){
-
-})
-
 bot.login('NzY4MTEyMzMyNzYwMjg1MjE1.X47uWg.9hkjwMjcygxyKBK2gv50xppB1Ec')
     .catch(console.error);
 
 
 function timer(){
     setTimeout(function() {
-        d = new Date();
-        hour = d.getHours();
-        if(oldHour != hour){
-            getBearerToken((err, token) => {
-                getTrendsAtPlace(token);
-            })
-        }
-        oldHour = hour;
+        getBearerToken((err, token) => {
+            getTrendsAtPlace(token);
+        })
         timer();
         return
     }, millisecondsToWait)
