@@ -27,7 +27,7 @@ function timer(){
 			getBearerToken((err, token) => {
 				getTrendsAtPlace(token);
 			})
-			timerTime = 0
+			timerTime = 65
 		}
         timer();
         return
