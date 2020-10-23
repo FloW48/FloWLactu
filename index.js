@@ -2,28 +2,33 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const request = require('request');
 
-var millisecondsToWait = 3600000;
-var d;
-var oldHour = -1;
-var hour = -1;
-var year = new Date().getFullYear();
-var dateToIngeButitIsFix = new Date(2024, 6, 1)
-var dateToInge = new Date(year+5, 6, 1);
+var millisecondsToWait = 1000*60*5;
+var timerTime = 65
 
 bot.on('ready', function(){
-    bot.user.setActivity("Top 1 sur l'actu").catch(console.error);
+    bot.user.setActivity("Top 1 sur l'actu -> "+(timerTime-5).toString()+" minutes").catch(console.error);
     timer()
 })
 
 bot.login('NzY4MTEyMzMyNzYwMjg1MjE1.X47uWg.9hkjwMjcygxyKBK2gv50xppB1Ec')
     .catch(console.error);
 
+bot.on('message', message => {
+	if(message.content.startsWith("flowtop1surlactu refresh") && message.author.id == '256054054260572161'){
+		message.channel.send("Refresh");
+	}
+})
 
 function timer(){
     setTimeout(function() {
-        getBearerToken((err, token) => {
-            getTrendsAtPlace(token);
-        })
+		timerTime -= 5
+		bot.user.setActivity("Top 1 sur l'actu -> "+timerTime.toString()+" minutes").catch(console.error);
+		if(timerTime == 0){
+			getBearerToken((err, token) => {
+				getTrendsAtPlace(token);
+			})
+			timerTime = 0
+		}
         timer();
         return
     }, millisecondsToWait)
