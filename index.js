@@ -10,7 +10,7 @@ bot.on('ready', function(){
     timer()
 })
 
-bot.login('NzY4MTEyMzMyNzYwMjg1MjE1.X47uWg.9hkjwMjcygxyKBK2gv50xppB1Ec')
+bot.login('token')
     .catch(console.error);
 
 bot.on('message', message => {
@@ -35,7 +35,7 @@ function timer(){
 }
 
 function getBearerToken(callback) {
-	const credentials = "sJErGHIEZ3J7pX5wuIBUFXeGH:cZYXecVPiLCa0v2Edd8UCI5SkUVSvyMenzMWbh9o8HMr3eJDk2";
+	const credentials = "tauken";
 	const credentialsBase64Encoded = new Buffer.from(credentials).toString('base64');
 
 	const options = {
