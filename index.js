@@ -1,16 +1,19 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const request = require('request');
+const tokens = require("./secret.json");
+
+var oldTrend = ""
 
 var millisecondsToWait = 1000*60*5;
-var timerTime = 65
+var timerTime = 245
 
 bot.on('ready', function(){
     bot.user.setActivity("Top 1 sur l'actu -> "+(timerTime-5).toString()+" minutes").catch(console.error);
     timer()
 })
 
-bot.login('token')
+bot.login(tokens.discordToken)
     .catch(console.error);
 
 bot.on('message', message => {
@@ -25,9 +28,12 @@ function timer(){
 		bot.user.setActivity("Top 1 sur l'actu -> "+timerTime.toString()+" minutes").catch(console.error);
 		if(timerTime == 0){
 			getBearerToken((err, token) => {
+				if(err){
+					console.log(err);
+				}
 				getTrendsAtPlace(token);
 			})
-			timerTime = 65
+			timerTime = 245
 		}
         timer();
         return
@@ -35,7 +41,7 @@ function timer(){
 }
 
 function getBearerToken(callback) {
-	const credentials = "tauken";
+	const credentials = tokens.credentials;
 	const credentialsBase64Encoded = new Buffer.from(credentials).toString('base64');
 
 	const options = {
@@ -65,11 +71,14 @@ function getTrendsAtPlace(token, callback) {
 
 	request(options, (error, response, body) => {
         var data = JSON.parse(body);
-        var name = data[0]["trends"][0]['name']
-        bot.guilds.fetch("626684559345451010").then(guild => {
-            guild.members.fetch("256054054260572161").then(member =>{
-                member.setNickname(name)
-            })
-        })
+		var name = data[0]["trends"][0]['name']
+		if(name != oldTrend){
+			oldTrend = name
+			bot.guilds.fetch("626684559345451010").then(guild => {
+				guild.members.fetch("256054054260572161").then(member =>{
+					member.setNickname(name)
+				})
+			})
+		}
 	})
 }
